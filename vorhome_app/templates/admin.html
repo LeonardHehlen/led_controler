@@ -12,7 +12,7 @@
         <button type="submit">VALIDER</button>
     </form>
     <div class="doc">
-        {% for trigger in triggers %}
+        {% for trigger in var_to_template['triggers'] %}
             <h3>"{{trigger.name.capitalize()}}"</h3>
             <p>{{trigger.description.capitalize()}}</p>
             <p><small><a href="{{url_for('triggeredit', trigger_id=trigger.id)}}">Modifier</a></small> <small><a href="{{url_for('triggerdel', trigger_id=trigger.id)}}">Supprimer</a></small></p>

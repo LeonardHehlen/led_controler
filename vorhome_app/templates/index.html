@@ -6,9 +6,14 @@
     <h1>Homepage working</h1>
     <form method="POST" action="">
         <button type="submit">ENREGISTRER</button>
+        <p>Ou entrez la commande ici :</p>
+        <input type="text" name="manual_entry"><br><br>
+        <button type="submit">Envoyer</button>
     </form>
-        <p>{% if url_stuff[0] != "vCommande non reconnue" %}{{url_stuff[0]}}{{url_stuff[1]}}{% endif %}</p>
-    {% if req == True:%}
-        <p>{% if url_stuff[0] != "Entrée reconnue: " %}<small>Voulez-vous dire: <a href="{{url_for('manualsubmit', submit=url_stuff[1])}}">{{url_stuff[1]}}</a> ?{% endif %}</small></p>
+    {% if req == True %}
+        <p>{% if var_to_template['found_word'] == None %}Commande inconnue.</p>
+        <p><small>Voulez-vous dire: <a href="">mot ressemblant trouvé dans la db</a></small>{% endif %}</p>
+        <p>{% if var_to_template['response'] == 0 and var_to_template['found_word'] != None %}Commande inconnue : {{var_to_template['found_word']}} {% endif %}</p>
+        <p>{% if var_to_template['response'] == 1 %}Entrée reconnue : {{var_to_template['found_word']}} {% endif %}</p>
     {% endif %}
 {% endblock %}

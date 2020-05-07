@@ -9,6 +9,9 @@ from vorhome_app.comtools import ArduinoCommunication
 port = "/dev/cu.usbmodem1411"
 baudrate = 115200
 
+var_to_template = {}
+
+
 def speech():
     # obtain audio from the microphone
     r = sr.Recognizer()
@@ -39,34 +42,38 @@ def check_trigger(trigger):
 @app.route("/", methods = ['POST', 'GET'])
 def home():
     req = False
-    # vor = ""
-    # response = ""
     url_stuff = [] # 0 = Words, 1 = Responses
     if request.method == 'POST':
         req = True
-        vor = speech()
-        if vor != None:
-            vor = vor.casefold()
-            url_stuff.insert(1, vor)
+        if request.form['manual_entry'] != "":
+            word = request.form['manual_entry']
         else:
-            vor = "Unknown"
-            url_stuff.insert(1, vor)
+            word = speech()
+        if word != None:
+            word = word.casefold()
+            var_to_template['found_word'] = word
+        else:
+            word = None
+            var_to_template['found_word'] = word
 
-        if check_trigger(vor) == False:
-            response = "Commande non reconnue"
-            url_stuff.insert(0, response)
+
+        if check_trigger(word) == False: # If the word isn't in the db
+            response = 0
+            var_to_template['response'] = response
+
         else:
-            response = "Entrée reconnue: "
-            ard = ArduinoCommunication(port, baudrate, 0, vor)
+            response = 1
+            ard = ArduinoCommunication(port, baudrate, 0, word)
             ard.send()
-            url_stuff.insert(0, response)
-    return render_template("index.html", url_stuff=url_stuff, req=req)
+            var_to_template['response'] = response
+
+    return render_template("index.html", var_to_template=var_to_template, req=req)
 
 
 @app.route("/admin", methods = ['POST', 'GET'])
 def admin():
     error = []
-    triggers = Triggers.query.all()
+    var_to_template['triggers'] = Triggers.query.all()
     if request.method == "POST":
         name = request.form['name']
         description = request.form['description']
@@ -77,7 +84,7 @@ def admin():
         else:
             error.append("Ce déclencheur est déjà enregistré.")
 
-    return render_template("admin.html", triggers=triggers)
+    return render_template("admin.html", var_to_template=var_to_template)
 
 @app.route("/manualsubmit/<submit>")
 def manualsubmit(submit):
@@ -93,7 +100,7 @@ def manualsubmit(submit):
 
 @app.route("/triggeredit/<int:trigger_id>", methods = ['POST', 'GET'])
 def triggeredit(trigger_id):
-    trigger = Triggers.query.get_or_404(trigger_id)
+    var_to_template['trigger'] = Triggers.query.get_or_404(trigger_id)
     if request.method == "POST":
         name = request.form['name']
         description = request.form['description']
@@ -102,7 +109,7 @@ def triggeredit(trigger_id):
         db.session.add(new_trigger)
         db.session.commit()
         return redirect(url_for("admin"))
-    return render_template("trigger.html", trigger=trigger)
+    return render_template("trigger.html", var_to_template=var_to_template)
 
 
 @app.route("/triggerdel/<int:trigger_id>")

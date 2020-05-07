@@ -9,8 +9,10 @@ class ArduinoCommunication(object):
         self.baudrate = baudrate
         self.timeout = timeout
         self.msg = msg
-
-        self.s = serial.Serial(port=port, baudrate=baudrate, timeout=timeout)
+        try:
+            self.s = serial.Serial(port=port, baudrate=baudrate, timeout=timeout)
+        except:
+            print(f"Could not open serial port {port}")
 
     
     def send(self):
@@ -30,4 +32,5 @@ class ArduinoCommunication(object):
             nr = nr.split("\n")
             nr = nr[0]
             print(nr)
+
         com(self)
