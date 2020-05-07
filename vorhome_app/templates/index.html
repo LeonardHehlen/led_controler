@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+    <h1>Homepage working</h1>
+    <form method="POST" action="">
+        <button type="submit">ENREGISTRER</button>
+    </form>
+        <p>{% if url_stuff[0] != "vCommande non reconnue" %}{{url_stuff[0]}}{{url_stuff[1]}}{% endif %}</p>
+    {% if req == True:%}
+        <p>{% if url_stuff[0] != "Entrée reconnue: " %}<small>Voulez-vous dire: <a href="{{url_for('manualsubmit', submit=url_stuff[1])}}">{{url_stuff[1]}}</a> ?{% endif %}</small></p>
+    {% endif %}
+{% endblock %}

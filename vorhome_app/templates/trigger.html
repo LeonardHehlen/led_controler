@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+    <h1>Admin Page</h1>
+    <form method="POST" action="">
+        <div class="doc">
+            <h3><textarea name="name" id="" cols="30" rows="1">"{{trigger.name.capitalize()}}"</textarea></h3>
+            <p><textarea name="description" id="" cols="30" rows="1">{{trigger.description.capitalize()}}</textarea></p>
+            <button type="submit">MODIFIER</button>
+        </div>
+    </form>
+{% endblock %}
