@@ -1,6 +1,10 @@
 # VoR_Home
 
-Voice Recognition Home is a portefolio oriented project, that's goal is to be a 
+Voice Recognition Home is a portefolio oriented project, which aims at showing how I would go about making a project from start to finish, from software to hardware.
+
+It includes languages like : Python, C++ (Arduino), html/css.
+A confirmed knowledge of Flask and SQLAlchemy.
+CAD Design with Blender for 3D Printing, and a certain knowledge of electronics and domotic. 
 
 Triggers(object):
 -----------------
