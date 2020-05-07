@@ -4,7 +4,7 @@ Voice Recognition Home is a portefolio oriented project, which aims at showing h
 
 It includes languages like : Python, C++ (Arduino), html/css.
 A confirmed knowledge of Flask and SQLAlchemy.
-CAD Design with Blender for 3D Printing, and a certain knowledge of electronics and domotic. 
+CAD Design with Blender for 3D Printing, and a certain knowledge of electronics and domotic.
 
 Triggers(object):
 -----------------
