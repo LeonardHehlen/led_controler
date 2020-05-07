@@ -6,6 +6,12 @@
 </head>
 <body>
     <div class="content">
+        <nav>
+            <ul>
+                <li><a href="{{url_for('home')}}">Accueil</a></li>
+                <li><a href="{{url_for('admin')}}">Panneau Admin</a></li>
+            </ul>
+        </nav>
         {% block content %}{% endblock %}
     </div>
 </body>

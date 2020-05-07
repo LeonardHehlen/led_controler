@@ -11,9 +11,11 @@
         <button type="submit">Envoyer</button>
     </form>
     {% if req == True %}
-        <p>{% if var_to_template['found_word'] == None %}Commande inconnue.</p>
-        <p><small>Voulez-vous dire: <a href="">mot ressemblant trouvé dans la db</a></small>{% endif %}</p>
-        <p>{% if var_to_template['response'] == 0 and var_to_template['found_word'] != None %}Commande inconnue : {{var_to_template['found_word']}} {% endif %}</p>
-        <p>{% if var_to_template['response'] == 1 %}Entrée reconnue : {{var_to_template['found_word']}} {% endif %}</p>
+
+        {% if var_to_template['found_word'] == None and var_to_template['suggestions'] == None %}<p>Aucune commande correspondante, vous pouvez trouver la liste des triggers <a href="{{url_for('admin')}}">ici</a></p>{% endif %}
+
+        {% if var_to_template['suggestions'] != None %}<p>{{var_to_template['found_word']}} est une commande inconnue.<small>Voulez-vous dire: {% for suggestion in var_to_template['suggestions'] %}<a href="{{url_for('suggestion', suggestion=suggestion)}}">{{suggestion}}</a>, {% endfor %}</small></p>{% endif %}
+
+        {% if var_to_template['response'] == 1 %}<p>Entrée reconnue : {{var_to_template['found_word']}}</p>{% endif %}
     {% endif %}
 {% endblock %}

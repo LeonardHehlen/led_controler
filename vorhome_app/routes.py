@@ -31,20 +31,60 @@ def speech():
     except:
         print("Unknown")
 
-def check_trigger(trigger):
+def check_trigger(word):
 
-    test = Triggers.query.filter_by(name=trigger).first()
+    test = Triggers.query.filter_by(name=word).first()
     if test is None:
         return False
     else:
         return test
 
+def suggest(entry):
+    wordsinlist = False
+
+    trigger_query = Triggers.query.all()
+    triggers = []
+    total_count = 0
+    likely_triggers = []
+
+    for words in trigger_query:
+        triggers.append(words.name)
+
+    # for trigger in triggers:
+    #     if trigger == entry:
+    #         print("Bien compris, j'effectue l'action associé à :", trigger)
+    #         wordsinlist = True
+
+    if wordsinlist == False:
+        for trigger in triggers:
+            count = 0
+            for letter in trigger:
+                if letter in entry:
+                    count += 1
+            if count >= 2:
+                likely_triggers.append(trigger)
+                total_count += 1
+
+        if total_count > 0:
+            # print("Did you meant :")
+            # for result in likely_triggers:
+            #     # print(result)
+            #     return result
+            return likely_triggers
+
+        else:
+            # print("Aucun résultat ne ressemble à votre entrée, consultez la liste de triggers sur cette page.")
+            return None
+
+print(suggest("bloom"))
+
+@app.route("/home", methods = ['POST', 'GET'])
 @app.route("/", methods = ['POST', 'GET'])
 def home():
     req = False
-    url_stuff = [] # 0 = Words, 1 = Responses
     if request.method == 'POST':
         req = True
+        response = 0
         if request.form['manual_entry'] != "":
             word = request.form['manual_entry']
         else:
@@ -52,16 +92,26 @@ def home():
         if word != None:
             word = word.casefold()
             var_to_template['found_word'] = word
-        else:
+        else: #if word is None it means it hasn't been heard.
             word = None
+            response = 0
+            var_to_template['suggestions'] = None
             var_to_template['found_word'] = word
+            var_to_template['response'] = response
+            return render_template("index.html", var_to_template=var_to_template, req=req)
 
 
         if check_trigger(word) == False: # If the word isn't in the db
-            response = 0
-            var_to_template['response'] = response
-
+            suggestions = suggest(word)
+            if suggestions is not None:
+                var_to_template['found_word'] = word
+                var_to_template['suggestions'] = suggestions
+            else:
+                word = None
+                var_to_template['found_word'] = word
+                var_to_template['suggestions'] = suggestions
         else:
+            var_to_template['suggestions'] = None
             response = 1
             ard = ArduinoCommunication(port, baudrate, 0, word)
             ard.send()
@@ -69,6 +119,15 @@ def home():
 
     return render_template("index.html", var_to_template=var_to_template, req=req)
 
+@app.route("/suggestion/<suggestion>")
+def suggestion(suggestion):
+    ard = ArduinoCommunication(port, baudrate, 0, suggestion)
+    ard.send()
+    response = 1
+    var_to_template['response'] = response
+    var_to_template['found_word'] = suggestion
+
+    return redirect(url_for("home"))
 
 @app.route("/admin", methods = ['POST', 'GET'])
 def admin():
