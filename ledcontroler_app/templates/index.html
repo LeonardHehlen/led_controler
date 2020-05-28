@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+    <div class="index-form">
+        <h2>VoR Home</h2>
+        <p><strong>Commandes à distance</strong></p>
+
+    
+        <!-- <form method="POST" action="">
+            <div class="button-space">
+                <button class="record-btn" type="submit">ENREGISTRER</button>
+            </div>
+            <p>Ou tapez la commande:</p>
+            <p><input type="text" name="manual_entry"></p>
+            <p><button type="submit">Executer</button></p>
+        </form> -->
+
+        <form method="POST" action="">
+            <button class="blue-btn" type="submit">BLUE</button>
+            <p style="display: none;"><input type="text" name="color_entry" value="blue"></p>
+        </form>
+        <form method="POST" action="">
+            <button class="red-btn" type="submit">RED</button>
+            <p style="display: none;"><input type="text" name="color_entry" value="red"></p>
+
+        </form>
+        <form method="POST" action="">
+            <button class="green-btn" type="submit">GREEN</button>
+            <p style="display: none;"><input type="text" name="color_entry" value="green"></p>
+
+        </form>
+
+        <form method="POST" action="">
+            <button class="white-btn" type="submit">WHITE</button>
+            <p style="display: none;"><input type="text" name="color_entry" value="white"></p>
+
+        </form>
+        <p>{{var_to_template['error']}}</p>
+    </div>
+
+{% endblock %}

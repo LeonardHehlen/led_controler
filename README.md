@@ -1,4 +1,4 @@
-# VoR_Home
+# ledcontroler
 
 Voice Recognition Home is a portefolio oriented project, which aims at showing how I would go about making a project from start to finish, from software to hardware.
 
